@@ -1,0 +1,116 @@
+## docker-compose up -d
+services:
+  ## ✅ NGINX
+  webserver:
+    container_name: ${NAME}-webserver
+    image: nginx:latest
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    volumes:
+      - ./wordpress/html/:${HTML_SITE_PATH}:rw,cached
+      - ./ngnix:/etc/nginx/:ro
+      - ./log/nginx:/var/log/nginx:rw
+    networks:
+      - app-network
+
+  ## ✅ Wordpress
+  wordpress:
+    container_name: ${NAME}-wordpress
+    # image: wordpress:php8.3-fpm-alpine
+    image: wordpress:php7.4-fpm-alpine
+    depends_on:
+      - db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./wordpress/html/:${HTML_SITE_PATH}:rw,cached
+      - ./php-fpm.d/:/usr/local/etc/php-fpm.d/:ro
+      - ./log/fpm/:/usr/local/var/log/:rw
+    networks:
+      - app-network
+
+  ## ✅ Database MariaDB
+  db:
+    container_name: ${NAME}-mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-grant-tables
+    volumes:
+      - db-volume:/var/lib/mysql
+      - ./wordpress/database/:/var/www/database/:rw
+      - ./wordpress/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+    env_file: .env
+    networks:
+      - app-network
+
+  ## ✅ SES-PostFix-relay https://github.com/tmclnk/ses-postfix-relay
+  mail: 
+    container_name: ${NAME}-mail
+    build: mail/.
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./mail/helo_access:/root/helo_access:ro
+    networks:
+      - app-network
+
+  ## ✅ Cron jobs
+  docker-cron:
+    container_name: ${NAME}-cronjob
+    build: cron/.
+    restart: unless-stopped
+    volumes:
+      - ./cron/cbin:/usr/cbin
+      - ./log/:/var/www/backup/:rw
+      - ./wordpress/database/:/var/www/database/:rw
+      - ./wordpress/html/:${HTML_SITE_PATH}:rw
+      - ./backup/:/var/backup:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    tty: true
+    env_file: .env
+    command: 
+      - cron
+    networks:
+      - app-network
+
+  ## ✅ Database PHPMYADMIN
+  phpmyadmin:
+    container_name: ${NAME}-phpmyadmin
+    image: phpmyadmin:latest
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./wordpress/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+    links:
+      - "db:db"
+    # ports:
+    #   - "5090:80"
+    networks:
+      - app-network
+
+  ## ✅ Cloudflare Tunnel
+  cloudflared:
+    container_name: ${NAME}-cloudflared-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token $CF_TOKEN
+    networks:
+      - app-network
+
+## Volumes
+volumes:
+  db-volume:
+    name: ${NAME}-mariadb-volume
+    external: true
+
+# Networking with subnet 172.59.0.0/24
+networks:
+  app-network:
+      driver: bridge
+      ipam:
+        config:
+          - subnet: "177.59.0.0/24"
+            gateway: "177.59.0.1"

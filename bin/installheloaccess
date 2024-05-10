@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+
+echo "⚙️ Setup ./mail/helo_access with ${DOMAIN}..."
+rm -rf ./mail/helo_access
+cat ./mail/helo_access.template > ./mail/helo_access
+
+echo 
+echo "${DOMAIN} PERMIT" >> ./mail/helo_access
+echo ".../helo_access > ${DOMAIN} PERMIT"
+
+echo "www.${DOMAIN} PERMIT" >> ./mail/helo_access
+echo ".../helo_access > www.${DOMAIN} PERMIT"
+
+echo "✅ DONE ./mail/helo_access"
+echo 

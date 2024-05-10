@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eu
+
+echo "⚙️ Setup ./php-fpm.d/zz-docker.conf with ${HTML_SITE_PATH}..."
+rm -rf ./php-fpm.d/zz-docker.conf
+cat ./php-fpm.d/zz-docker.conf.template > ./php-fpm.d/zz-docker.conf
+
+echo "php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php" >> ./php-fpm.d/zz-docker.conf
+echo ".../zz-docker.conf > php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php;"
+
+echo 
+echo "⚙️ Setup ./php-fpm.d/zz-docker.conf with ${DOMAIN}..."
+echo "php_admin_value[sendmail_from] = server@${DOMAIN}" >> ./php-fpm.d/zz-docker.conf
+echo ".../zz-docker.conf > php_admin_value[sendmail_from] = server@${DOMAIN}"
+
+echo "✅ DONE ./php-fpm.d/zz-docker.conf"
+echo 

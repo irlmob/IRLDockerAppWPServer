@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -eu
+# export d="<DOMAIN>"
+echo "⚙️ Setup ./ngnix/conf.d/default.conf with ${DOMAIN}..."
+rm -rf ./ngnix/conf.d/default.conf
+cp -pr ./ngnix/conf.d/default.conf.template ./ngnix/conf.d/default.conf
+sed -i "s@<DOMAIN>@${DOMAIN}@" ./ngnix/conf.d/default.conf
+sed -i "s@<DOMAIN>@${DOMAIN}@" ./ngnix/conf.d/default.conf
+sed -i "s@<DOMAIN>@${DOMAIN}@" ./ngnix/conf.d/default.conf
+echo ".../conf.d/default.conf > sed -i 's@<DOMAIN>@${DOMAIN}@'"
+
+sed -i "s@<HTMLPATH>@${HTML_SITE_PATH}@" ./ngnix/conf.d/default.conf
+sed -i "s@<HTMLPATH>@${HTML_SITE_PATH}@" ./ngnix/conf.d/default.conf
+sed -i "s@<HTMLPATH>@${HTML_SITE_PATH}@" ./ngnix/conf.d/default.conf
+echo ".../conf.d/default.conf > sed -i 's@<HTMLPATH>@${HTML_SITE_PATH}@'"
+
+echo "✅ DONE ./ngnix/conf.d/default.conf"
+echo 

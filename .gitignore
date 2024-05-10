@@ -1,0 +1,14 @@
+
+.env
+
+wordpress/
+
+ngnix/conf.d/ssl/
+
+ngnix/conf.d/default.conf
+
+mail/helo_access
+
+log/
+
+php-fpm.d/zz-docker.conf

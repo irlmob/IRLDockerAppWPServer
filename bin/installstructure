@@ -1,0 +1,25 @@
+#!/bin/bash
+
+mkdir -p ./log/make
+mkdir -p ./log/fpm
+mkdir -p ./log/nginx
+
+mkdir -p ./ngnix/conf.d/ssl/certs
+mkdir -p ./ngnix/conf.d/ssl/private
+
+mkdir -p ./wordpress/html
+
+mkdir -p ./wordpress/database
+
+rm -rf ./wordpress/database/resticdump
+cp -pr ./bin/install/resticdump ./wordpress/database/resticdump
+chmod 766 ./wordpress/database/resticdump
+
+rm -rf ./wordpress/database/restore
+cp -pr ./bin/install/restore ./wordpress/database/restore
+chmod 766 ./wordpress/database/restore
+
+mkdir -p ./wordpress/phpmyadmin
+rm -rf ./wordpress/phpmyadmin/config.user.inc.php
+cp -pr ./bin/install/config.user.inc.php ./wordpress/phpmyadmin/config.user.inc.php
+chmod 766 ./wordpress/phpmyadmin/config.user.inc.php

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -eu
+
+export SYNC_PATH=/var/www/
+export BCK_PATH=/var/backup/
+export PASS_FILE=/tmp/restic-password.txt
+
+# Check if a snapshot ID was provided as an argument; if not, use 'latest'
+SNAPSHOT_ID=${1:-latest}
+
+echo "$(date) 🚀 Started Restore: $SYNC_PATH using snapshot $SNAPSHOT_ID"
+echo -n $RESTIC_PASSWORD > $PASS_FILE
+
+# List snapshots for verification or logging
+restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME snapshots
+
+# Proceed with the restore using the snapshot ID or 'latest'
+restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME --target / restore $SNAPSHOT_ID
+
+# Remove the password file after the operation is complete
+rm -rf /tmp/restic-password.txt
+echo "$(date) ✅ Done with Restore: $SYNC_PATH"

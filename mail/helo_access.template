@@ -1,0 +1,8 @@
+################################################################################
+# helo_access
+################################################################################
+# This file controls access to the relay. Example whitelist entries are listed
+# below. You should remove the examples and add your own. You will need a
+# a minimum of one entry here, however.
+wordpress PERMIT
+wordpress.local PERMIT
