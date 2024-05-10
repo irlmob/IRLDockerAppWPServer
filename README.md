@@ -1,8 +1,40 @@
+# IRLDockerAppWPServer - All In Word Wordpress/Nginx/SES/CloudFlare/Backup
 
+### Overview
+
+IRLDockerAppWPServer is a comprehensive Docker-based project designed to set up a WordPress environment using Nginx, integrated with several other services such as Amazon SES for email delivery, CloudFlare for DNS and security enhancements, and automated backup solutions. The system is tailored for deployment on Linux distributions and leverages Docker for containerization, ensuring a consistent environment across different systems.
+
+### Purposer
+
+The primary purpose of the IRLDockerAppWPServer is to provide users with a robust, scalable, and secure platform for hosting WordPress sites. This setup aims to simplify the configuration processes associated with complex WordPress deployments, integrating essential services such as secure email delivery, SSL/TLS management, and database administration. By automating many of the setup steps, it allows users to quickly deploy and manage WordPress sites with enhanced security features and performance optimizations.
+
+### Key Features and Steps
+
+1. **Environment Setup**: Users begin by cloning the repository and setting up the `.env` file which configures the environment variables necessary for the different components of the stack.
+2. **Integration with CloudFlare**: This includes setting up a tunnel for secure connectivity and configuring DNS settings to ensure the site is accessible and secure.
+3. **Email Configuration**: The system integrates with Amazon SES for email functionality, requiring users to input their AWS credentials and configure email settings in Nginx.
+4. **Security Measures**: It includes steps for generating CloudFlare edge certificates and configuring content security policies in Nginx to enhance security.
+5. **Database Management**: Users configure database access for both WordPress and phpMyAdmin, ensuring that database credentials are securely handled and correctly linked to the respective services.
+6. **WordPress Configuration**: Adjustments to `wp-config.php` ensure that WordPress recognizes the correct site URL and database settings.
+7. **Operational Commands**: The setup includes `make` commands for managing Docker containers, such as creating volumes and starting the server.
+8. **Testing and Deployment**: Final steps involve testing the email system with Amazon SES and starting the entire Docker setup to go live.
+
+This Docker setup is especially beneficial for developers and administrators looking to deploy WordPress sites efficiently with a focus on security and performance, without the need for extensive manual configuration.
+
+## Prerequisites
+- **Docker**: Docker must be install on the machine.
+- **Make**: Required to execute the make commands.
+  - Install Make: `apt-get install build-essential`
+- **Linux distributions ONLY**:
 
 ## First setup your .env file:
 
 ### Step 1. .env
+
+Clone the repo in your folder
+`git clone https://github.com/irlmob/IRLDockerAppWPServer.git`
+
+`cp env.template .env`
 fill your .env file
 
 ### Step 2. Run Install
