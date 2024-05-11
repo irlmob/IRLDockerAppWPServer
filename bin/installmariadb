@@ -1,29 +1,35 @@
-#!/bin/bash
+#! /bin/bash
+# @author: Denis Martin-Bruillot
 
 set -eu
 source .env
 
-echo "⚙️ Setup ./wordpress/docker-entrypoint-initdb.d/initfile.sql ..."
+## MariaDB Init file
+echo -e "
+\033[32m🛠️  MARIADB | Init: \033[0mGRANT + Access for root and ${PMA_USER} 
+see: ./wordpress/docker-entrypoint-initdb.d/initfile.sql ...\033[0m"
+
 mkdir -p ./wordpress/docker-entrypoint-initdb.d
 rm -rf ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo 
+echo "
+CREATE USER IF NOT EXISTS root@localhost IDENTIFIED BY '${DB_ROOT_PW}';
+SET PASSWORD FOR root@localhost = PASSWORD('${DB_ROOT_PW}');
+GRANT ALL ON *.* TO root@localhost WITH GRANT OPTION;
 
-echo "CREATE USER IF NOT EXISTS root@localhost IDENTIFIED BY '${DB_ROOT_PW}';" > ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "SET PASSWORD FOR root@localhost = PASSWORD('${DB_ROOT_PW}');" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "GRANT ALL ON *.* TO root@localhost WITH GRANT OPTION;" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo ".../initfile.sql > GRANT ALL ON *.* TO root@localhost WITH GRANT OPTION;"
+CREATE USER IF NOT EXISTS root@'%' IDENTIFIED BY '${DB_ROOT_PW}';
+SET PASSWORD FOR root@'%' = PASSWORD('${DB_ROOT_PW}');
+GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;
 
-echo "CREATE USER IF NOT EXISTS root@'%' IDENTIFIED BY '${DB_ROOT_PW}';" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "SET PASSWORD FOR root@'%' = PASSWORD('${DB_ROOT_PW}');" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo ".../initfile.sql > GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;"
+CREATE USER IF NOT EXISTS ${PMA_USER}@'%' IDENTIFIED BY '${PMA_PASSWORD}';
+SET PASSWORD FOR ${PMA_USER}@'%' = PASSWORD('${PMA_PASSWORD}');
+CREATE DATABASE IF NOT EXISTS ${PMA_DB_NAME};
+GRANT ALL ON  ${PMA_DB_NAME}.* TO ${PMA_USER}@'%';
+" > ./wordpress/docker-entrypoint-initdb.d/initfile.sql
 
-echo "CREATE USER IF NOT EXISTS ${PMA_USER}@'%' IDENTIFIED BY '${PMA_PASSWORD}';" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "SET PASSWORD FOR ${PMA_USER}@'%' = PASSWORD('${PMA_PASSWORD}');" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "CREATE DATABASE IF NOT EXISTS ${PMA_DB_NAME};" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo "GRANT ALL ON  ${PMA_DB_NAME}.* TO ${PMA_USER}@'%';" >> ./wordpress/docker-entrypoint-initdb.d/initfile.sql
-echo ".../initfile.sql > GRANT ALL ON  ${PMA_DB_NAME}.* TO ${PMA_USER}@'%';"
-echo 
+echo -e "
+    .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@localhost WITH GRANT OPTION\033[0m;
+    .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@'%' WITH GRANT OPTION\033[0m;
+    .../initfile.sql > GRANT ALL ON \033[32m${PMA_DB_NAME}.* TO ${PMA_USER}@'%'\033[0m;
 
-echo "✅ DONE ./wordpress/docker-entrypoint-initdb.d/initfile.sql"
-echo 
+\033[32m✅ MARIADB | DONE Setup ./wordpress/docker-entrypoint-initdb.d/initfile.sql\033[0m
+"

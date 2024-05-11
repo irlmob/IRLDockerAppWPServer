@@ -1,17 +1,28 @@
 #!/bin/bash
 
 set -eu
+source .env
 
-echo "⚙️ Setup ./mail/helo_access with ${DOMAIN}..."
+echo -e "
+\033[32m🛠️  HELOACCESS | Init: \033[0mAllow wordpress container to send email via SES on behalf of ${DOMAIN} 
+see ./mail/helo_access ...\033[0m"
 rm -rf ./mail/helo_access
-cat ./mail/helo_access.template > ./mail/helo_access
 
-echo 
-echo "${DOMAIN} PERMIT" >> ./mail/helo_access
-echo ".../helo_access > ${DOMAIN} PERMIT"
+echo "
+################################################################################
+# helo_access
+################################################################################
+# This file controls access to the relay. Example whitelist entries are listed
+# below. You should remove the examples and add your own. You will need a
+# a minimum of one entry here, however.
+wordpress PERMIT
+wordpress.local PERMIT
+${DOMAIN} PERMIT
+www.${DOMAIN} PERMIT" > ./mail/helo_access
 
-echo "www.${DOMAIN} PERMIT" >> ./mail/helo_access
-echo ".../helo_access > www.${DOMAIN} PERMIT"
+echo -e "
+    .../helo_access > ${DOMAIN} PERMIT
+    .../helo_access > www.${DOMAIN} PERMIT
 
-echo "✅ DONE ./mail/helo_access"
-echo 
+\033[32m✅ HELOACCESS| DONE Setup ./mail/helo_access \033[0m
+"

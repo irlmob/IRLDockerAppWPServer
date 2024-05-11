@@ -33,28 +33,18 @@ down:
 restart: down up
 
 restore: down cleanup all
-	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticrestore ${SNAPSHOT}"
+	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-cronjob bash -c "/usr/cbin/resticrestore ${SNAPSHOT}"
 	@sleep 5
-	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
+	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-mariadb bash -c "/var/www/database/restore"
 	docker restart ${NAME}-mariadb
 
 snapshot:
-	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticbackup user"
+	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-cronjob bash -c "/usr/cbin/resticbackup user"
 
 logs:
 	docker compose logs --follow
 
 config: SHELL:=/bin/bash
 config: precheck 
+	@chmod +x ./bin/install*
 	@./bin/installstructure 
-	@echo 
-	@echo "🛠️ 💻 Started 'make config' | ${DOMAIN}" >> ./log/make/config.log
-	@echo "⚙️ Starting config for ${DOMAIN}"
-	@echo "..."
-	@./bin/installphpfpm >> ./log/make/config.log
-	@./bin/installheloaccess >> ./log/make/config.log
-	@./bin/installngnix >> ./log/make/config.log
-	@./bin/installmariadb >> ./log/make/config.log
-	@echo "✅ ${DOMAIN} is configured, see log/make/config.log"
-	@echo "🛠️ ✅ DONE - 'make config' | ${DOMAIN}" >> ./log/make/config.log
-

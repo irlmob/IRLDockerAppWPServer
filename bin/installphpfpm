@@ -1,18 +1,23 @@
-#!/bin/bash
+#! /bin/bash
+# @author: Denis Martin-Bruillot
 
 set -eu
+source .env
+echo -e "
+\033[32m🛠️ php-fpm WORDPRESS | Init \033[0m
+see  ./php-fpm.d/zz-docker.conf...\033[0m"
 
-echo "⚙️ Setup ./php-fpm.d/zz-docker.conf with ${HTML_SITE_PATH}..."
 rm -rf ./php-fpm.d/zz-docker.conf
-cat ./php-fpm.d/zz-docker.conf.template > ./php-fpm.d/zz-docker.conf
+cp ./php-fpm.d/zz-docker.conf.template ./php-fpm.d/zz-docker.conf
 
-echo "php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php" >> ./php-fpm.d/zz-docker.conf
-echo ".../zz-docker.conf > php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php;"
+echo "
+php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php
+php_admin_value[sendmail_from] = server@${DOMAIN}
+" >> ./php-fpm.d/zz-docker.conf
 
-echo 
-echo "⚙️ Setup ./php-fpm.d/zz-docker.conf with ${DOMAIN}..."
-echo "php_admin_value[sendmail_from] = server@${DOMAIN}" >> ./php-fpm.d/zz-docker.conf
-echo ".../zz-docker.conf > php_admin_value[sendmail_from] = server@${DOMAIN}"
+echo -e "
+    .../zz-docker.conf > php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php;
+    .../zz-docker.conf > php_admin_value[sendmail_from] = server@${DOMAIN}
 
-echo "✅ DONE ./php-fpm.d/zz-docker.conf"
-echo 
+\033[32m✅ php-fpm WORDPRESS | DONE ./php-fpm.d/zz-docker.conf\033[0m
+"

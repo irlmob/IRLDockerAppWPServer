@@ -18,7 +18,7 @@ if ! restic -r $BCK_PATH --password-file $PASS_FILE snapshots >/dev/null 2>&1; t
 fi
 
 #DUMP DB
-docker exec ${DBNAME} bash -c "/var/www/database/resticdump"
+docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${DBNAME} bash -c "/var/www/database/resticdump"
 
 # Proceed with the backup
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME backup --tag $TAG $SYNC_PATH

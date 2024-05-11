@@ -1,25 +1,44 @@
-#!/bin/bash
+#! /bin/bash
+# @author: Denis Martin-Bruillot
+source .env
 
+echo -e "\033[30m_____________________________________________________________
+
+ \033[32m🐳 Configuring Folder and Environments:\033[0m
+
+    \033[30m- Docker Compose Name:      \033[32m${COMPOSE_PROJECT_NAME}\033[0m
+    \033[30m- Docker Network: Gateway   \033[32m${MYGATEWAY}\033[0m | Subnet \033[32m${MYNETWORKS}\033[0m
+
+    \033[30m- Domain Name:              \033[32m${DOMAIN}\033[0m
+    \033[30m- HTML Path:                \033[32m${HTML_SITE_PATH}\033[0m
+    \033[30m- Wordpress Databse:        \033[32m${PMA_USER}\033[0m
+    \033[30m- Wordpress DB User:        \033[32m${PMA_DB_NAME}\033[0m
+    \033[30m- AWS SES Region:           \033[32m${AWS_REGION_OVERRIDE}\033[0m
+    \033[30m- AWS SES User:             \033[32m${SES_USERNAME_PARAM}\033[0m
+
+\033[30m_____________________________________________________________"
+
+sleep 2
+## Log Folder Structure
 mkdir -p ./log/make
 mkdir -p ./log/fpm
 mkdir -p ./log/nginx
-
-mkdir -p ./ngnix/conf.d/ssl/certs
-mkdir -p ./ngnix/conf.d/ssl/private
-
+## HTML Directory
 mkdir -p ./wordpress/html
-
+## Database Backup/Restore Directory
 mkdir -p ./wordpress/database
+rm -rf ./wordpress/database/resticdump ./wordpress/database/restore
+cp ./bin/install/resticdump ./wordpress/database/resticdump
+cp ./bin/install/restore ./wordpress/database/restore
+chmod +x ./wordpress/database/resticdump ./wordpress/database/restore
 
-rm -rf ./wordpress/database/resticdump
-cp -pr ./bin/install/resticdump ./wordpress/database/resticdump
-chmod 766 ./wordpress/database/resticdump
+./bin/installphpfpm
+./bin/installheloaccess
+./bin/installngnix
+./bin/installmariadb
+./bin/installphpmyadmin
 
-rm -rf ./wordpress/database/restore
-cp -pr ./bin/install/restore ./wordpress/database/restore
-chmod 766 ./wordpress/database/restore
+echo -e "\033[30m_____________________________________________________________
 
-mkdir -p ./wordpress/phpmyadmin
-rm -rf ./wordpress/phpmyadmin/config.user.inc.php
-cp -pr ./bin/install/config.user.inc.php ./wordpress/phpmyadmin/config.user.inc.php
-chmod 766 ./wordpress/phpmyadmin/config.user.inc.php
+\033[32m 🛠️ ✅ DONE - 'make config' | ${DOMAIN}
+\033[30m_____________________________________________________________"

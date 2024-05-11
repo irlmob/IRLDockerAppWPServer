@@ -35,12 +35,12 @@ Clone the repo in your folder
 `git clone https://github.com/irlmob/IRLDockerAppWPServer.git`
 
 `cp env.template .env`
-fill your .env file
 
 ### Step 2. Run Install
 ```bash
 make config
 ```
+
 ⚠️ Make sure domain is also configured in:
 `./php-fpm.d/zz-docker.conf -> php_admin_value[sendmail_from] = server@<DOMAIN>`
 `./mail/helo_access -> <DOMAIN> PERMIT`

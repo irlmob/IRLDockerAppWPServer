@@ -6,7 +6,7 @@ export TIMESTAMP=$(date +%Y%m%d_%H%M)
 
 cd /var/www/database
 rm -rf dbdump-*.sql.gz
-mariadb-dump -u root --all-databases | gzip -c >  dbdump-$TIMESTAMP.sql.gz
+mariadb-dump -u root -p$DB_ROOT_PW --all-databases | gzip -c >  dbdump-$TIMESTAMP.sql.gz
 echo "📦 mariadb-dump -> dbdump-$TIMESTAMP.sql.gz"
 rm -rf latest.sql.gz
 ln -s dbdump-$TIMESTAMP.sql.gz latest.sql.gz 

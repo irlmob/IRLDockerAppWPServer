@@ -1,0 +1,34 @@
+#! /bin/bash
+# @author: Denis Martin-Bruillot
+
+set -eu
+source .env
+
+## PHPMYADMIN Auto Authentificatio Directory
+echo -e "
+\033[32m🛠️  PHPMYADMIN | \033[91m⛔️ Disable Web authentification\033[0m
+see: ./wordpress/phpmyadmin/config.user.inc.php...\033[0m"
+
+mkdir -p ./wordpress/phpmyadmin
+rm -rf ./wordpress/phpmyadmin/config.user.inc.php
+echo "
+<?php
+/* Servers configuration */
+\$i = 1;
+
+/* Server parameters */
+\$cfg['Servers'][\$i]['host'] = 'db'; // Replace 'localhost' with your DB host
+
+/* Authentication type */
+\$cfg['Servers'][\$i]['auth_type'] = 'config';
+\$cfg['Servers'][\$i]['AllowNoPassword'] = false; // Set to true if the DB user does not require a password
+\$cfg['Servers'][\$i]['$PMA_USER'] = 'wordpressuser';
+\$cfg['Servers'][\$i]['$PMA_PASSWORD'] = 'wordpresspwd';
+" > ./wordpress/phpmyadmin/config.user.inc.php
+chmod +x ./wordpress/phpmyadmin/config.user.inc.php
+
+echo -e "
+    ...config.user.inc.php > \033[91m⛔️ Disable Web authentification! \033[0mAutologin with \033[32m$PMA_USER
+
+\033[32m✅ PHPMYADMIN | DONE Setup ./wordpress/phpmyadmin/config.user.inc.php...\033[0m
+"

@@ -1,5 +1,5 @@
 #!/bin/bash
 set -eu
 
-gunzip < /var/www/database/latest.sql.gz | mariadb -u root
+gunzip < /var/www/database/latest.sql.gz | mariadb -u root -p$DB_ROOT_PW
 echo "📦 mariadb-restored -> latest.sql.gz"
