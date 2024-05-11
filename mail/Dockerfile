@@ -42,8 +42,9 @@ rm -rf /var/lib/apt/lists/*
 # We need aws-cli to look up credentials
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /root/awscliv2.zip && cd /root && unzip awscliv2.zip && ./aws/install && rm /root/awscliv2.zip
 
-ADD ./helo_access /root/helo_access
 ADD ./startup.sh /usr/local/bin/startup.sh
+
+RUN chmod +x /usr/local/bin/startup.sh
 
 ENTRYPOINT ["tini", "--", "/usr/local/bin/startup.sh"]
 

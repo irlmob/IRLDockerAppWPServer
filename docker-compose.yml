@@ -50,6 +50,8 @@ services:
     build: mail/.
     restart: unless-stopped
     env_file: .env
+    environment:
+      - "SES_PRIMARY_DOMAIN=${SES_PRIMARY_DOMAIN}"
     volumes:
       - ./configs/mail/helo_access:/root/helo_access:ro
     networks:
