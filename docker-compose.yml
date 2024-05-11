@@ -67,7 +67,6 @@ services:
       - ./html/:${HTML_SITE_PATH}:rw
       - ./configs/:/var/www/config/:rw
       - ./configs/cronjobs/cbin:/usr/cbin
-      - ./backup/:/var/backup:rw
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
     tty: true
