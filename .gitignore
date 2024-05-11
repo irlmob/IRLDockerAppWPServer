@@ -12,3 +12,5 @@ mail/helo_access
 log/
 
 php-fpm.d/zz-docker.conf
+
+backup/
