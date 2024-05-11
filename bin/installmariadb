@@ -27,7 +27,7 @@ GRANT ALL ON  ${PMA_DB_NAME}.* TO ${PMA_USER}@'%';
 " > ./wordpress/docker-entrypoint-initdb.d/initfile.sql
 
 echo -e "
-    .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@localhost WITH GRANT OPTION\033[0m;
+    .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@'localhost' WITH GRANT OPTION\033[0m;
     .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@'%' WITH GRANT OPTION\033[0m;
     .../initfile.sql > GRANT ALL ON \033[32m${PMA_DB_NAME}.* TO ${PMA_USER}@'%'\033[0m;
 
