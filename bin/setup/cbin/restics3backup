@@ -20,7 +20,7 @@ docker exec ${DBNAME} bash -c "/var/www/database/resticdump"
 
 # Proceed with the backup
 restic --host $COMPOSE_PROJECT_NAME backup --tag $TAG $SYNC_PATH
-restic --host $COMPOSE_PROJECT_NAME forget --tag cronjob --keep-last 10 --keep-hourly 12 --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75 --prune
+restic --host $COMPOSE_PROJECT_NAME forget --tag cronjob --keep-last 10 --keep-hourly 12 --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 2 --prune
 restic --host $COMPOSE_PROJECT_NAME forget --tag user --keep-last 5 --prune
 restic --host $COMPOSE_PROJECT_NAME snapshots > /var/www/config/log/s3-snapshots.txt
 cat /var/www/config/log/s3-snapshots.txt

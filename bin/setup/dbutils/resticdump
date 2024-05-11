@@ -4,15 +4,13 @@ set -eu
 ## Variables
 export TIMESTAMP=$(date +%Y%m%d_%H%M)
 cd /var/www/database
-rm -rf dbdump-*.sql.gz
+rm -rf latest.sql.gz
 
 rm -rf ~/.my.cnf
 printf "[mysql]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" > ~/.my.cnf
 printf "\n[mysqldump]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
 chmod 600 /root/.my.cnf
-mariadb-dump --defaults-file=~/.my.cnf -h localhost --all-databases | gzip -c > dbdump-$TIMESTAMP.sql.gz
+mariadb-dump --defaults-file=~/.my.cnf -h localhost --all-databases | gzip -c > latest.sql.gz
 rm -rf ~/.my.cnf
 
-echo "📦 mariadb-dump -> dbdump-$TIMESTAMP.sql.gz"
-rm -rf latest.sql.gz
-ln -s dbdump-$TIMESTAMP.sql.gz latest.sql.gz 
+echo "📦 mariadb-dump -> latest.sql.gz"

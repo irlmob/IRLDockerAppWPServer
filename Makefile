@@ -38,6 +38,11 @@ restore: down cleanup all
 	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
 	docker restart ${NAME}-mariadb
 
+restoredb: down cleanup all
+	@sleep 5
+	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
+	docker restart ${NAME}-mariadb
+
 snapshot:
 	docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3backup user"
 
