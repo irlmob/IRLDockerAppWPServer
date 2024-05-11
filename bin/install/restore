@@ -1,5 +1,11 @@
 #!/bin/bash
 set -eu
 
-gunzip < /var/www/database/latest.sql.gz | mariadb -u root -p$DB_ROOT_PW
+rm -rf ~/.my.cnf
+printf "[mysql]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" > ~/.my.cnf
+printf "\n[mysqldump]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
+chmod 600 /root/.my.cnf
+gunzip < /var/www/database/latest.sql.gz | mariadb -defaults-file=~/.my.cnf -p$DB_ROOT_PW
+rm -rf ~/.my.cnf
+
 echo "📦 mariadb-restored -> latest.sql.gz"

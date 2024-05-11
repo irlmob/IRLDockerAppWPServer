@@ -18,8 +18,9 @@ if ! restic -r $BCK_PATH --password-file $PASS_FILE snapshots >/dev/null 2>&1; t
 fi
 
 #DUMP DB
-docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${DBNAME} bash -c "/var/www/database/resticdump"
+docker exec ${DBNAME} bash -c "/var/www/database/resticdump"
 
+exit 0;
 # Proceed with the backup
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME backup --tag $TAG $SYNC_PATH
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME forget --tag cronjob --keep-last 10 --keep-hourly 12 --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75 --prune

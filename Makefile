@@ -33,13 +33,13 @@ down:
 restart: down up
 
 restore: down cleanup all
-	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-cronjob bash -c "/usr/cbin/resticrestore ${SNAPSHOT}"
+	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticrestore ${SNAPSHOT}"
 	@sleep 5
-	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-mariadb bash -c "/var/www/database/restore"
+	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
 	docker restart ${NAME}-mariadb
 
 snapshot:
-	docker exec -e DB_ROOT_PW="${DB_ROOT_PW}" ${NAME}-cronjob bash -c "/usr/cbin/resticbackup user"
+	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticbackup user"
 
 logs:
 	docker compose logs --follow
