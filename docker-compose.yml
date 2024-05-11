@@ -35,7 +35,7 @@ services:
     container_name: ${NAME}-mariadb
     image: mariadb:latest
     restart: unless-stopped
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-grant-tables
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - db-volume:/var/lib/mysql
       - ./wordpress/database/:/var/www/database/:rw
@@ -106,11 +106,11 @@ volumes:
     name: ${NAME}-mariadb-volume
     external: true
 
-# Networking with subnet 172.59.0.0/24
+# Networking with subnet
 networks:
   app-network:
       driver: bridge
       ipam:
         config:
-          - subnet: "177.59.0.0/24"
-            gateway: "177.59.0.1"
+          - subnet: "${MYNETWORKS}"
+            gateway: "${MYGATEWAY}"

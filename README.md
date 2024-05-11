@@ -115,6 +115,13 @@ PMA_PASSWORD=<wordpress db password>
 PMA_DB_NAME=<wordpress db name>
 ```
 
+### SCP form the server.
+
+```
+scp -r root@vpsovh:/var/www/sardirlmobcom wordpress/html
+scp root@vpsovh:/root/docker/irlmobile-mariadb/share/dump/latest.sql.gz wordpress/database/latest.sql.gz
+```
+
 ### Step 8.
 - Update your `wp-config.php`:
 ```

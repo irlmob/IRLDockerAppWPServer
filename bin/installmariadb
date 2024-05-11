@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eu
+source .env
 
 echo "⚙️ Setup ./wordpress/docker-entrypoint-initdb.d/initfile.sql ..."
 mkdir -p ./wordpress/docker-entrypoint-initdb.d
