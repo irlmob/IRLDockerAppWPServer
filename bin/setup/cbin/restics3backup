@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eu
+export SYNC_PATH=/var/www/
+source /.restic.env
+
+# Check if a snapshot ID was provided as an argument; if not, use 'latest'
+TAG=${1:-cronjob}
+
+echo "$(date) 🚀 Started S3 Restic: $SYNC_PATH"
+
+# Check if the repository exists by listing snapshots, initialize if it does not exist
+if ! restic snapshots >/dev/null 2>&1; then
+    echo "Initializing Restic repository..."
+    restic init
+fi
+
+#DUMP DB
+docker exec ${DBNAME} bash -c "/var/www/database/resticdump"
+
+# Proceed with the backup
+restic --host $COMPOSE_PROJECT_NAME backup --tag $TAG $SYNC_PATH
+restic --host $COMPOSE_PROJECT_NAME forget --tag cronjob --keep-last 10 --keep-hourly 12 --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75 --prune
+restic --host $COMPOSE_PROJECT_NAME forget --tag user --keep-last 5 --prune
+restic --host $COMPOSE_PROJECT_NAME snapshots > /var/www/config/log/s3-snapshots.txt
+cat /var/www/config/log/s3-snapshots.txt
+
+echo "$(date) ✅ Done with S3 Restic: $SYNC_PATH"

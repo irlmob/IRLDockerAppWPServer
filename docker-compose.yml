@@ -63,6 +63,7 @@ services:
     build: cron/.
     restart: unless-stopped
     volumes:
+      - ./.restic.env:/.restic.env:ro
       - ./html/:${HTML_SITE_PATH}:rw
       - ./configs/:/var/www/config/:rw
       - ./configs/cronjobs/cbin:/usr/cbin

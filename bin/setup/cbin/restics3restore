@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -eu
+source /.restic.env
+export SYNC_PATH=/var/www/
+
+# Check if a snapshot ID was provided as an argument; if not, use 'latest'
+SNAPSHOT_ID=${1:-latest}
+
+echo "$(date) 🚀 Started Restore: $SYNC_PATH using snapshot $SNAPSHOT_ID"
+
+# List snapshots for verification or logging
+restic --host $COMPOSE_PROJECT_NAME snapshots
+
+# Proceed with the restore using the snapshot ID or 'latest'
+restic --host $COMPOSE_PROJECT_NAME --target / restore $SNAPSHOT_ID
+
+# Remove the password file after the operation is complete
+echo "$(date) ✅ Done with Restore: $SYNC_PATH"

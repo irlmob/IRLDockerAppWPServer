@@ -25,7 +25,7 @@ restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME back
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME forget --tag cronjob --keep-last 10 --keep-hourly 12 --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75 --prune
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME forget --tag user --keep-last 5 --prune
 restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME snapshots > /var/www/config/log/snapshots.txt
-cat /var/www/backup/snapshots.txt
+cat /var/www/config/log/snapshots.txt
 #restic -r $BCK_PATH --password-file $PASS_FILE --host $COMPOSE_PROJECT_NAME --target / restore latest
 # restic -r $BCK_PATH ls latest
 

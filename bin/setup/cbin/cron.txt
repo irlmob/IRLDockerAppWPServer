@@ -1,2 +1,2 @@
 ## HTML+DB Backups resticbackup
-32 * * * * bash /usr/cbin/resticbackup
+32 * * * * bash /usr/cbin/restics3backup

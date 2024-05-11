@@ -33,13 +33,13 @@ down:
 restart: down up
 
 restore: down cleanup all
-	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticrestore ${SNAPSHOT}"
+	docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3restore ${SNAPSHOT}"
 	@sleep 5
 	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
 	docker restart ${NAME}-mariadb
 
 snapshot:
-	docker exec ${NAME}-cronjob bash -c "/usr/cbin/resticbackup user"
+	docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3backup user"
 
 logs:
 	docker compose logs --follow
