@@ -22,7 +22,7 @@ volume: canrun
 	
 cleanup: down
 	docker volume rm ${NAME}-mariadb-volume
-	@./bin/installmariadb
+	@./bin/lib/installmariadb
 	
 up: canrun
 	docker-compose up -d
