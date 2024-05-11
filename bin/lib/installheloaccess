@@ -5,8 +5,8 @@ source .env
 
 echo -e "
 \033[32m🛠️  HELOACCESS | Init: \033[0mAllow wordpress container to send email via SES on behalf of ${DOMAIN} 
-see ./mail/helo_access ...\033[0m"
-rm -rf ./mail/helo_access
+see ./configs/mail/helo_access ...\033[0m"
+rm -rf ./configs/mail/helo_access
 
 echo "
 ################################################################################
@@ -18,11 +18,11 @@ echo "
 wordpress PERMIT
 wordpress.local PERMIT
 ${DOMAIN} PERMIT
-www.${DOMAIN} PERMIT" > ./mail/helo_access
+www.${DOMAIN} PERMIT" > ./configs/mail/helo_access
 
 echo -e "
     .../helo_access > ${DOMAIN} PERMIT
     .../helo_access > www.${DOMAIN} PERMIT
 
-\033[32m✅ HELOACCESS| DONE Setup ./mail/helo_access \033[0m
+\033[32m✅ HELOACCESS| DONE Setup ./configs/mail/helo_access \033[0m
 "

@@ -13,9 +13,9 @@ precheck:
 	@if [ ! -f "./.env" ]; then echo "⚠️ .env doesn't exists."; exit 1; fi
 
 canrun: precheck
-	@if [ ! -f "./php-fpm.d/zz-docker.conf" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
-	@if [ ! -f "./mail/helo_access" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
-	@if [ ! -f "./ngnix/conf.d/default.conf" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
+	@if [ ! -f "./configs/php-fpm.d/zz-docker.conf" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
+	@if [ ! -f "./configs/mail/helo_access" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
+	@if [ ! -f "./configs/nginx/conf.d/default.conf" ]; then echo "⚠️ Missing configuration, run make config"; exit 1; fi
 
 volume: canrun
 	docker volume create ${NAME}-mariadb-volume

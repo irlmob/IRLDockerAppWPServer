@@ -1,0 +1,30 @@
+#! /bin/bash
+# @author: Denis Martin-Bruillot
+
+set -eu
+source .env
+
+# export d="<DOMAIN>"
+echo -e "
+\033[32m🛠️ nginx | Init \033[0m
+see  ./configs/nginx/conf.d/default.conf...\033[0m"
+
+tar -xf ./bin/setup/nginx.tar --directory ./configs/
+
+## nginx SSL Folder Structure
+mkdir -p ./configs/nginx/conf.d/ssl/certs
+mkdir -p ./configs/nginx/conf.d/ssl/private
+
+## Config
+rm -rf ./configs/nginx/conf.d/default.conf
+cp -pr ./configs/nginx/conf.d/default.conf.template ./configs/nginx/conf.d/default.conf
+
+sed -i.bak 's#<DOMAIN>#'"${DOMAIN}"'#g; s#<HTMLPATH>#'"${HTML_SITE_PATH}"'#g' ./configs/nginx/conf.d/default.conf
+rm -rf ./configs/nginx/conf.d/default.conf.bak
+
+echo -e "
+    .../conf.d/default.conf > <DOMAIN> Replaced by ${DOMAIN}
+    .../conf.d/default.conf > <HTML_SITE_PATH> Replaced by ${HTML_SITE_PATH}
+
+\033[32m✅  nginx | DONE ./configs/nginx/conf.d/default.conf\033[0m
+"

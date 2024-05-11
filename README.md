@@ -4,9 +4,13 @@
 
 IRLDockerAppWPServer is a comprehensive Docker-based project designed to set up a WordPress environment using Nginx, integrated with several other services such as Amazon SES for email delivery, CloudFlare for DNS and security enhancements, and automated backup solutions. The system is tailored for deployment on Linux distributions and leverages Docker for containerization, ensuring a consistent environment across different systems.
 
-### Purposer
+### Purpose
 
-The primary purpose of the IRLDockerAppWPServer is to provide users with a robust, scalable, and secure platform for hosting WordPress sites. This setup aims to simplify the configuration processes associated with complex WordPress deployments, integrating essential services such as secure email delivery, SSL/TLS management, and database administration. By automating many of the setup steps, it allows users to quickly deploy and manage WordPress sites with enhanced security features and performance optimizations.
+The primary purpose of the IRLDockerAppWPServer is to provide users with a robust, scalable, and secure platform for hosting WordPress sites. 
+
+This setup aims to simplify the configuration processes associated with complex WordPress deployments, integrating essential services such as secure email delivery, SSL/TLS management, and database administration. By automating many of the setup steps, 
+
+it allows users to quickly deploy and manage WordPress sites with enhanced security features and performance optimizations.
 
 ### Key Features and Steps
 
@@ -41,11 +45,6 @@ Clone the repo in your folder
 make config
 ```
 
-⚠️ Make sure domain is also configured in:
-`./php-fpm.d/zz-docker.conf -> php_admin_value[sendmail_from] = server@<DOMAIN>`
-`./mail/helo_access -> <DOMAIN> PERMIT`
-`./ngnix/conf.d/default.conf `
-
 ### Step 3.
 In Cloud Flare create a tunnel.
 
@@ -65,12 +64,12 @@ phpmyadmin..<DOMAIN>   *              http://phpmyadmin:80
 - This is HIGHLY discoraged to expose phpmyadmin.
 ```
   volumes:
-      - ./wordpress/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+      - ./configs/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
 ```
 
 
 ### Step 4.
-Generate an Edge certificate for Cloudfalre, they are user in NGNIX.
+Generate an Edge certificate for Cloudfalre, they are user in nginx.
 ```
  ssl_certificate      conf.d/ssl/certs/cloudflare-origin.crt;
  ssl_certificate_key  conf.d/ssl/private/cloudflare-origin.key;
@@ -85,7 +84,7 @@ conf.d/ssl/private/cloudflare-origin.key;
 
 ### Step 5.
 Check you nginx content security:
-`./ngnix/conf.d/default.conf`
+`./configs/nginx/conf.d/default.conf`
 
 ```
 add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: *.youtube.com cdnjs.cloudflare.com *.wp.com *.wp.com <DOMAIN>/* www.<DOMAIN>/*; frame-src 'self' *.youtube.com; object-src 'self'; " always;
@@ -109,17 +108,17 @@ Please not `PMA_USER/PMA_PASSWRORD/PMA_DB_NAME` are user for both, Wordpress and
 ### Database
 DB_ROOT_PW=<root password>
 
-### PHPMyAdmin/Wordpress user
+### PHPMyAdmin/configs user
 PMA_USER=<wordpress db user>
 PMA_PASSWORD=<wordpress db password>
 PMA_DB_NAME=<wordpress db name>
 ```
 
-### SCP form the server.
+### SCP form a server.
 
 ```
-scp -r root@vpsovh:/var/www/sardirlmobcom wordpress/html
-scp root@vpsovh:/root/docker/irlmobile-mariadb/share/dump/latest.sql.gz wordpress/database/latest.sql.gz
+scp -r root@vpsovh:/var/www/sardirlmobcom ./html
+scp root@vpsovh:/root/docker/irlmobile-mariadb/share/dump/latest.sql.gz configs/database/latest.sql.gz
 ```
 
 ### Step 8.

@@ -5,19 +5,20 @@ set -eu
 source .env
 echo -e "
 \033[32m🛠️ php-fpm WORDPRESS | Init \033[0m
-see  ./php-fpm.d/zz-docker.conf...\033[0m"
+see  ./configs/php-fpm.d/zz-docker.conf...\033[0m"
+tar -xf ./bin/setup/php-fpm.d.tar --directory ./configs/
 
-rm -rf ./php-fpm.d/zz-docker.conf
-cp ./php-fpm.d/zz-docker.conf.template ./php-fpm.d/zz-docker.conf
+rm -rf ./configs/php-fpm.d/zz-docker.conf
+cp ./configs/php-fpm.d/zz-docker.conf.template ./configs/php-fpm.d/zz-docker.conf
 
 echo "
 php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php
 php_admin_value[sendmail_from] = server@${DOMAIN}
-" >> ./php-fpm.d/zz-docker.conf
+" >> ./configs/php-fpm.d/zz-docker.conf
 
 echo -e "
     .../zz-docker.conf > php_admin_value[auto_prepend_file] = ${HTML_SITE_PATH}wordfence-waf.php;
     .../zz-docker.conf > php_admin_value[sendmail_from] = server@${DOMAIN}
 
-\033[32m✅ php-fpm WORDPRESS | DONE ./php-fpm.d/zz-docker.conf\033[0m
+\033[32m✅ php-fpm WORDPRESS | DONE ./configs/php-fpm.d/zz-docker.conf\033[0m
 "

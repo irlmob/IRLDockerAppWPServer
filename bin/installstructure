@@ -20,23 +20,31 @@ echo -e "\033[30m_____________________________________________________________
 
 sleep 2
 ## Log Folder Structure
-mkdir -p ./log/make
-mkdir -p ./log/fpm
-mkdir -p ./log/nginx
+mkdir -p ./configs/log/fpm ./configs/log/nginx
+mkdir -p ./configs/mail/
 ## HTML Directory
-mkdir -p ./wordpress/html
+mkdir -p ./html
 ## Database Backup/Restore Directory
-mkdir -p ./wordpress/database
-rm -rf ./wordpress/database/resticdump ./wordpress/database/restore
-cp ./bin/install/resticdump ./wordpress/database/resticdump
-cp ./bin/install/restore ./wordpress/database/restore
-chmod +x ./wordpress/database/resticdump ./wordpress/database/restore
+mkdir -p ./configs/database
+rm -rf ./configs/database/resticdump ./configs/database/restore
+cp ./bin/setup/dbutils/* ./configs/database/
+chmod +x ./configs/database/resticdump ./configs/database/restore
+## Cron Directory
+mkdir -p ./configs/cronjobs
+cp -pr ./bin/setup/cbin ./configs/cronjobs/
+chmod +x ./configs/cronjobs/cbin/restic*
 
-./bin/installphpfpm
-./bin/installheloaccess
-./bin/installngnix
-./bin/installmariadb
-./bin/installphpmyadmin
+chmod +x ./bin/lib/*
+./bin/lib/installphpfpm
+sleep 1
+./bin/lib/installheloaccess
+sleep 1
+./bin/lib/installnginx
+sleep 1
+./bin/lib/installmariadb
+sleep 1
+./bin/lib/installphpmyadmin
+sleep 1
 
 echo -e "\033[30m_____________________________________________________________
 
