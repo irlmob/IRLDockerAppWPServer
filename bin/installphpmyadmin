@@ -22,8 +22,8 @@ echo "
 /* Authentication type */
 \$cfg['Servers'][\$i]['auth_type'] = 'config';
 \$cfg['Servers'][\$i]['AllowNoPassword'] = false; // Set to true if the DB user does not require a password
-\$cfg['Servers'][\$i]['$PMA_USER'] = 'wordpressuser';
-\$cfg['Servers'][\$i]['$PMA_PASSWORD'] = 'wordpresspwd';
+\$cfg['Servers'][\$i]['user'] = '$PMA_USER';
+\$cfg['Servers'][\$i]['password'] = '$PMA_PASSWORD';
 " > ./wordpress/phpmyadmin/config.user.inc.php
 chmod +x ./wordpress/phpmyadmin/config.user.inc.php
 
