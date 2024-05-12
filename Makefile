@@ -37,7 +37,8 @@ restore: down
 	@./bin/installfullrestore
 	
 restoredb: down cleanup all
-	@sleep 5
+	@echo "🧭 Waiting 20s for DB to be ready"
+	@sleep 20
 	@docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
 	@docker restart ${NAME}-mariadb
 
@@ -49,9 +50,11 @@ logs:
 
 config: SHELL:=/bin/bash
 config: precheck 
+	@ufw allow from any to any proto tcp port 7844 comment "Cloudfalre ZeroTrust Tunnels tcp/7844"
+	@ufw allow from any to any proto udp port 7844 comment "Cloudfalre ZeroTrust Tunnels udp/7844"
 	@chmod +x ./bin/install*
 	@./bin/installstructure 
 
-telport: snapshot
+teleport: snapshot
 	@chmod +x ./bin/install*
 	@./bin/installteleport 

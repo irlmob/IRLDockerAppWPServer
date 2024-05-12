@@ -8,6 +8,9 @@ echo -e "\033[30m_____________________________________________________________
 \033[30m_____________________________________________________________"
 
 sleep 2
+ufw allow from any to any proto tcp port 7844 comment "Cloudfalre Zerotrust Tunnels tcp/7844"
+ufw allow from any to any proto udp port 7844 comment "Cloudfalre Zerotrust Tunnels udp/7844"
+
 docker-compose up -d docker-cron
 docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3restore ${SNAPSHOT}"
 docker-compose down
@@ -15,7 +18,8 @@ docker volume rm ${NAME}-mariadb-volume
 docker volume create ${NAME}-mariadb-volume
 docker-compose up -d db
 
-sleep 5
+echo "🧭 Waiting 20s for DB to be ready"
+sleep 20
 docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
 docker-compose down
 docker-compose up -d 

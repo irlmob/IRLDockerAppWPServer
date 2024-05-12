@@ -117,6 +117,7 @@ PMA_DB_NAME=<wordpress db name>
 ### SCP form a server.
 
 ```
+scp -r teleport/sardirlmobcom-web/ root@vpsovh:/root/apps/
 scp -r root@vpsovh:/var/www/sardirlmobcom ./html
 scp root@vpsovh:/root/docker/irlmobile-mariadb/share/dump/latest.sql.gz configs/database/latest.sql.gz
 ```
