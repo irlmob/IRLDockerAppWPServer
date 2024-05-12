@@ -9,6 +9,12 @@ SNAPSHOT_ID=${1:-latest}
 
 echo "$(date) 🚀 Started Restore: $SYNC_PATH using snapshot $SNAPSHOT_ID"
 
+# Check if the repository exists by listing snapshots, initialize if it does not exist
+if ! restic snapshots >/dev/null 2>&1; then
+    echo "Initializing Restic repository..."
+    restic init
+fi
+
 # List snapshots for verification or logging
 restic --host $COMPOSE_PROJECT_NAME snapshots
 

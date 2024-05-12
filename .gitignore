@@ -4,3 +4,5 @@
 
 configs/
 html/
+*-web.tar.gz
+teleport/

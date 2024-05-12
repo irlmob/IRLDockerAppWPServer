@@ -33,21 +33,13 @@ down:
 restart: down up
 
 restore: down 
-	@docker-compose up -d docker-cron
-	@docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3restore ${SNAPSHOT}"
-	@docker-compose down
-	@docker volume rm ${NAME}-mariadb-volume
-	@docker volume create ${NAME}-mariadb-volume
-	@docker-compose up -d db
-	@sleep 5
-	@docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
-	@docker-compose down
-	@docker-compose up -d 
+	@chmod +x ./bin/install*
+	@./bin/installfullrestore
 	
 restoredb: down cleanup all
 	@sleep 5
-	docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
-	docker restart ${NAME}-mariadb
+	@docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
+	@docker restart ${NAME}-mariadb
 
 snapshot:
 	docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3backup user"
@@ -59,3 +51,7 @@ config: SHELL:=/bin/bash
 config: precheck 
 	@chmod +x ./bin/install*
 	@./bin/installstructure 
+
+telport: snapshot
+	@chmod +x ./bin/install*
+	@./bin/installteleport 

@@ -9,6 +9,12 @@ export PASS_FILE=/tmp/restic-password.txt
 # Check if a snapshot ID was provided as an argument; if not, use 'latest'
 SNAPSHOT_ID=${1:-latest}
 
+# Check if the repository exists by listing snapshots, initialize if it does not exist
+if ! restic -r $BCK_PATH --password-file $PASS_FILE snapshots >/dev/null 2>&1; then
+    echo "Initializing Restic repository..."
+    restic -r $BCK_PATH init --password-file $PASS_FILE
+fi
+
 echo "$(date) 🚀 Started Restore: $SYNC_PATH using snapshot $SNAPSHOT_ID"
 echo -n $RESTIC_PASSWORD > $PASS_FILE
 

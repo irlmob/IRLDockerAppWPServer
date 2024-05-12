@@ -9,7 +9,7 @@ echo -e "
 \033[32m🛠️ nginx | Init \033[0m
 see  ./configs/nginx/conf.d/default.conf...\033[0m"
 
-tar -xf ./bin/setup/nginx.tar --directory ./configs/
+tar -xf ./bin/setup/nginx.tar --directory ./configs/ | true
 
 ## nginx SSL Folder Structure
 mkdir -p ./configs/nginx/conf.d/ssl/certs

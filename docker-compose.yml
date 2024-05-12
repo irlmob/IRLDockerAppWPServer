@@ -63,7 +63,8 @@ services:
     build: cron/.
     restart: unless-stopped
     volumes:
-      - ./.restic.env:/.restic.env:ro
+      # - ./backup:/.backup:rw # If you want to use local backup. 
+      - ./.restic.env:/.restic.env:ro # If you want to use S3 backup. 
       - ./html/:${HTML_SITE_PATH}:rw
       - ./configs/:/var/www/config/:rw
       - ./configs/cronjobs/cbin:/usr/cbin

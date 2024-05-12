@@ -1,0 +1,110 @@
+#! /bin/bash
+# @author: Denis Martin-Bruillot
+source .env
+clear
+
+echo -e "\033[30m_____________________________________________________________
+
+ \033[32m🐳 🌟  Computer prepare for teleportation:\033[0m 🪐
+"
+
+sleep 1
+rm -rf ./teleport
+rm -rf ${COMPOSE_PROJECT_NAME}-teleport.tar.gz
+rm -rf IRLDockerAppWPServer.tar.gz
+
+mkdir -p ./teleport
+cp -pr .env ./teleport/
+cp -pr .restic.env ./teleport/
+cp -pr ./configs ./teleport/
+rm -rf ./teleport./configs/log/fpm/*
+rm -rf ./teleport./configs/nginx/fpm/*
+rm -rf ./teleport./configs/nginx/fpm/*
+rm -rf ./teleport/configs/database/*.sql.gz
+cp -pr ./configs ./teleport/
+tar -czf ${COMPOSE_PROJECT_NAME}-teleport.tar.gz ./teleport
+rm -rf ./teleport
+
+mkdir -p ./IRLDockerAppWPServer
+cp -pr ./bin ./IRLDockerAppWPServer/
+cp -pr ./cron ./IRLDockerAppWPServer/
+cp -pr ./mail ./IRLDockerAppWPServer/
+cp -pr ./*.template ./IRLDockerAppWPServer/
+cp -pr ./*.md ./IRLDockerAppWPServer/
+cp -pr ./Makefile ./IRLDockerAppWPServer/
+cp -pr ./*.yml ./IRLDockerAppWPServer/
+tar -czf IRLDockerAppWPServer.tar.gz ./IRLDockerAppWPServer
+rm -rf ./IRLDockerAppWPServer
+
+echo -e "
+#! /bin/bash
+# @author: Denis Martin-Bruillot
+echo -e \"_____________________________________________________________
+
+🌟 Enterprise, beam me in 🪐
+
+🛠️ 🪐 Aye captain, Welcome... let's get you settle
+
+\"
+sleep 1
+
+tar -xzf ${COMPOSE_PROJECT_NAME}-teleport.tar.gz ./teleport -C ./teleport
+sleep 1
+mv teleport/* .
+mv teleport/.* .
+rm -rf teleport
+sleep 1
+tar -xzf IRLDockerAppWPServer.tar.gz ./IRLDockerAppWPServer -C ./IRLDockerAppWPServer
+sleep 1
+mv IRLDockerAppWPServer/* .
+mv IRLDockerAppWPServer/.* .
+rm -rf IRLDockerAppWPServer
+ls -la 
+sleep 1
+echo -e \"
+🛠️ ✅ Aye captain - Here you are 🚀, All setup
+_____________________________________________________________\"
+" > ${COMPOSE_PROJECT_NAME}-teleport.sh
+
+chmod +x ${COMPOSE_PROJECT_NAME}-teleport.sh
+
+mkdir -p ${COMPOSE_PROJECT_NAME}-teleporter
+
+mv ${COMPOSE_PROJECT_NAME}-teleport.tar.gz ${COMPOSE_PROJECT_NAME}-teleporter/
+mv IRLDockerAppWPServer.tar.gz ${COMPOSE_PROJECT_NAME}-teleporter/
+mv ${COMPOSE_PROJECT_NAME}-teleport.sh ${COMPOSE_PROJECT_NAME}-teleporter/
+tar -czf ${COMPOSE_PROJECT_NAME}-teleporter.tar.gz ./${COMPOSE_PROJECT_NAME}-teleporter
+
+rm -rf ./teleport
+mkdir -p ./teleport
+mv ${COMPOSE_PROJECT_NAME}-teleporter.tar.gz ./teleport/${COMPOSE_PROJECT_NAME}.tar.gz
+mv ${COMPOSE_PROJECT_NAME}-teleporter ./teleport/${COMPOSE_PROJECT_NAME}
+
+echo -e "
+\033[32m 🛠️ ✅ Aye captain, ALL DONE, you're ready to teleport: 
+
+\033[36mFor NOW, choose one of your transport 🚀 | \033[33m
+
+ - copy \033[30m./teleport/${COMPOSE_PROJECT_NAME}\033[33m
+ - OR copy \033[30m./teleport/${COMPOSE_PROJECT_NAME}.tar.gz\033[33m
+
+\033[0m Then navigate with your favorite transport 🚀  to this strange new world! (copy it basically) \033[32m
+
+
+\033[36mUppon Arrival to your destination 🌏 Here are the steps to get you settle | \033[33m
+
+    - If you used: \033[30m${COMPOSE_PROJECT_NAME}.tar.gz
+    \033[0mtar -xzf ${COMPOSE_PROJECT_NAME}.tar.gz -c ./${COMPOSE_PROJECT_NAME}
+    cd ${COMPOSE_PROJECT_NAME}\033[33m
+
+    - If you used: \033[30m${COMPOSE_PROJECT_NAME}/  
+    \033[0m cd ${COMPOSE_PROJECT_NAME}\033[33m
+
+    - Finally:
+    \033[0mchmod +x ${COMPOSE_PROJECT_NAME}-teleport.sh
+    ./${COMPOSE_PROJECT_NAME}-teleport.sh
+    make restore\033[32m
+
+Hope you enjoy your trip!
+\033[30m_____________________________________________________________\033[0m
+"
