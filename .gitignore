@@ -2,6 +2,7 @@
 .env
 .restic.env
 
+OTHERS.md
 configs/
 html/
 *-web.tar.gz

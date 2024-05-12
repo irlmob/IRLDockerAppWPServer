@@ -22,6 +22,10 @@ cp -pr ./configs/nginx/conf.d/default.conf.template ./configs/nginx/conf.d/defau
 sed -i.bak 's#<DOMAIN>#'"${DOMAIN}"'#g; s#<HTMLPATH>#'"${HTML_SITE_PATH}"'#g' ./configs/nginx/conf.d/default.conf
 rm -rf ./configs/nginx/conf.d/default.conf.bak
 
+cd ./configs/nginx/
+ln -s /usr/lib/nginx/modules | true
+cd ../..
+
 echo -e "
     .../conf.d/default.conf > <DOMAIN> Replaced by ${DOMAIN}
     .../conf.d/default.conf > <HTML_SITE_PATH> Replaced by ${HTML_SITE_PATH}

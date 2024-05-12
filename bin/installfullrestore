@@ -14,6 +14,11 @@ ufw allow from any to any proto udp port 7844 comment "Cloudfalre Zerotrust Tunn
 docker-compose up -d docker-cron
 docker exec ${NAME}-cronjob bash -c "/usr/cbin/restics3restore ${SNAPSHOT}"
 docker-compose down
+
+cd ./configs/nginx/
+ln -s /usr/lib/nginx/modules | true
+cd ../..
+
 docker volume rm ${NAME}-mariadb-volume
 docker volume create ${NAME}-mariadb-volume
 docker-compose up -d db
