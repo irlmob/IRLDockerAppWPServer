@@ -30,6 +30,11 @@ up: canrun
 down:
 	docker-compose down
 
+update:
+	docker-compose pull
+	docker-compose down 
+	docker-compose up -d
+
 restart: down up
 
 restore: down 
