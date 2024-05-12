@@ -19,7 +19,7 @@ canrun: precheck
 
 volume: canrun
 	docker volume create ${NAME}-mariadb-volume
-	
+
 cleanup: down
 	docker volume rm ${NAME}-mariadb-volume
 	@./bin/lib/installmariadb

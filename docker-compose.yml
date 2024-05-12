@@ -35,12 +35,16 @@ services:
     container_name: ${NAME}-mariadb
     image: mariadb:latest
     restart: unless-stopped
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - db-volume:/var/lib/mysql
       - ./configs/database/:/var/www/database/:rw
       - ./configs/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
     env_file: .env
+    command: 
+          - "--default-time-zone=Europe/Rome"
+          - "--character-set-server=utf8mb4"
+          - "--collation-server=utf8mb4_unicode_ci"
+          - "--skip-grant-tables"
     networks:
       - app-network
 
