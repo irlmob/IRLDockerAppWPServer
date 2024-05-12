@@ -58,3 +58,9 @@ config: precheck
 teleport: snapshot
 	@chmod +x ./bin/install*
 	@./bin/installteleport 
+
+teleport-all: teleport
+	@cp -pr .git ./teleport/${COMPOSE_PROJECT_NAME}/.git
+	@cp -pr .gitignore ./teleport/${COMPOSE_PROJECT_NAME}/
+	@rm -rf ./teleport/${COMPOSE_PROJECT_NAME}.tar.gz
+	@tar -czf ./teleport/${COMPOSE_PROJECT_NAME}/html.tar.gz ./html 
