@@ -17,11 +17,9 @@ mkdir -p ./teleport
 cp -pr .env ./teleport/
 cp -pr .restic.env ./teleport/
 cp -pr ./configs ./teleport/
-rm -rf ./teleport./configs/log/fpm/*
-rm -rf ./teleport./configs/nginx/fpm/*
-rm -rf ./teleport./configs/nginx/fpm/*
+rm -rf ./teleport/configs/log/fpm/*
+rm -rf ./teleport/configs/log/nginx/*
 rm -rf ./teleport/configs/database/*.sql.gz
-cp -pr ./configs ./teleport/
 tar -czf ${COMPOSE_PROJECT_NAME}-teleport.tar.gz ./teleport
 rm -rf ./teleport
 
