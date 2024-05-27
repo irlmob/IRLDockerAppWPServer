@@ -19,13 +19,13 @@ cd ./configs/nginx/
 ln -s /usr/lib/nginx/modules | true
 cd ../..
 
-docker volume rm ${NAME}-mariadb-volume
-docker volume create ${NAME}-mariadb-volume
+docker volume rm ${DBNAME}-volume
+docker volume create ${DBNAME}-volume
 docker-compose up -d db
 
 echo "🧭 Waiting 20s for DB to be ready"
 sleep 20
-docker exec ${NAME}-mariadb bash -c "/var/www/database/restore"
+docker exec ${DBNAME} bash -c "/var/www/database/restore"
 docker-compose down
 docker-compose up -d 
 

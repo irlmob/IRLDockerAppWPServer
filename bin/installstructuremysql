@@ -27,7 +27,7 @@ mkdir -p ./html
 ## Database Backup/Restore Directory
 mkdir -p ./configs/database
 rm -rf ./configs/database/resticdump ./configs/database/restore
-cp ./bin/setup/dbutils/* ./configs/database/
+cp ./bin/setup/dbutilsmysql/* ./configs/database/
 chmod +x ./configs/database/resticdump ./configs/database/restore
 ## Cron Directory
 mkdir -p ./configs/cronjobs
@@ -41,7 +41,7 @@ sleep 1
 sleep 1
 ./bin/lib/installnginx
 sleep 1
-./bin/lib/installmariadb
+./bin/lib/installmysql
 sleep 1
 ./bin/lib/installphpmyadmin
 sleep 1

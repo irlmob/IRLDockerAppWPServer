@@ -22,7 +22,7 @@ volume: canrun
 
 cleanup: down
 	docker volume rm ${DBNAME}-volume || true
-	@./bin/lib/installmariadb
+	@./bin/lib/installmysql
 	
 up: canrun
 	docker-compose up -d
@@ -58,7 +58,7 @@ config: precheck
 	@ufw allow from any to any proto tcp port 7844 comment "Cloudfalre ZeroTrust Tunnels tcp/7844"
 	@ufw allow from any to any proto udp port 7844 comment "Cloudfalre ZeroTrust Tunnels udp/7844"
 	@chmod +x ./bin/install*
-	@./bin/installstructure 
+	@./bin/installstructuremysql 
 
 teleport: snapshot
 	@chmod +x ./bin/install*

@@ -1,0 +1,18 @@
+#!/bin/bash
+set -eu
+
+## Variables
+export TIMESTAMP=$(date +%Y%m%d_%H%M)
+cd /var/www/database
+rm -rf latest.sql.gz
+
+rm -rf ~/.my.cnf
+printf "\n[mysqld]\ndefault_authentication_plugin=mysql_native_password\n" > ~/.my.cnf
+printf "[mysql]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
+printf "\n[mysqldump]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
+chmod 600 /root/.my.cnf
+mysqldump --defaults-file=~/.my.cnf -h localhost --all-databases | gzip -c > latest.sql.gz
+rm -rf ~/.my.cnf
+
+echo "📦 mysql-dump -> latest.sql.gz"
+

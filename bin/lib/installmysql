@@ -4,26 +4,28 @@
 set -eu
 source .env
 
-## MariaDB Init file
+## Mysql Init file
 echo -e "
-\033[32m🛠️  MARIADB | Init: \033[0mGRANT + Access for root and ${PMA_USER} 
+\033[32m🛠️  mysql | Init: \033[0mGRANT + Access for root and ${PMA_USER} 
 see: ./configs/docker-entrypoint-initdb.d/initfile.sql ...\033[0m"
 
 mkdir -p ./configs/docker-entrypoint-initdb.d
 rm -rf ./configs/docker-entrypoint-initdb.d/initfile.sql
 echo "
-CREATE USER IF NOT EXISTS root@'%' IDENTIFIED BY '${DB_ROOT_PW}';
-SET PASSWORD FOR root@'%' = PASSWORD('${DB_ROOT_PW}');
+CREATE USER IF NOT EXISTS root@'%' IDENTIFIED WITH 'mysql_native_password' BY '${DB_ROOT_PW}';
+ALTER USER root@'%' IDENTIFIED WITH 'mysql_native_password' BY '${DB_ROOT_PW}';
 GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;
 
-CREATE USER IF NOT EXISTS root@'localhost' IDENTIFIED BY '${DB_ROOT_PW}';
-SET PASSWORD FOR root@'localhost' = PASSWORD('${DB_ROOT_PW}');
+CREATE USER IF NOT EXISTS root@'localhost' IDENTIFIED WITH 'mysql_native_password' BY '${DB_ROOT_PW}';
+ALTER USER root@'localhost' IDENTIFIED WITH 'mysql_native_password' BY '${DB_ROOT_PW}';
 GRANT ALL ON *.* TO root@'localhost' WITH GRANT OPTION;
 
-CREATE USER IF NOT EXISTS ${PMA_USER}@'%' IDENTIFIED BY '${PMA_PASSWORD}';
-SET PASSWORD FOR ${PMA_USER}@'%' = PASSWORD('${PMA_PASSWORD}');
+CREATE USER IF NOT EXISTS ${PMA_USER}@'%' IDENTIFIED WITH 'mysql_native_password' BY '${PMA_PASSWORD}';
+ALTER USER ${PMA_USER}@'%' IDENTIFIED WITH 'mysql_native_password' BY '${PMA_PASSWORD}';
 CREATE DATABASE IF NOT EXISTS ${PMA_DB_NAME};
 GRANT ALL ON  ${PMA_DB_NAME}.* TO ${PMA_USER}@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
 " > ./configs/docker-entrypoint-initdb.d/initfile.sql
 
 echo -e "
@@ -31,5 +33,5 @@ echo -e "
     .../initfile.sql > GRANT ALL ON *.* TO \033[32mroot@'%' WITH GRANT OPTION\033[0m;
     .../initfile.sql > GRANT ALL ON \033[32m${PMA_DB_NAME}.* TO ${PMA_USER}@'%'\033[0m;
 
-\033[32m✅ MARIADB | DONE Setup ./configs/docker-entrypoint-initdb.d/initfile.sql\033[0m
+\033[32m✅ mysql | DONE Setup ./configs/docker-entrypoint-initdb.d/initfile.sql\033[0m
 "

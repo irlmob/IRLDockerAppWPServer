@@ -1,0 +1,13 @@
+#!/bin/bash
+set -eu
+
+rm -rf ~/.my.cnf
+printf "\n[mysqld]\ndefault_authentication_plugin=mysql_native_password\n" > ~/.my.cnf
+printf "[mysql]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
+printf "\n[mysqldump]\nuser=root\npassword=$DB_ROOT_PW\nhost=localhost\n" >> ~/.my.cnf
+chmod 600 /root/.my.cnf
+gunzip < /var/www/database/latest.sql.gz | mysql --defaults-file=~/.my.cnf
+
+rm -rf ~/.my.cnf
+
+echo "📦 latest.sql.gz -> mysql RESTORED"

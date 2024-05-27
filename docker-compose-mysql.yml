@@ -6,7 +6,10 @@ services:
     image: nginx:latest
     restart: unless-stopped
     depends_on:
+      - db
       - wordpress
+    links:
+      - "db:db"
     volumes:
       - ./html/:${HTML_SITE_PATH}:rw,cached
       - ./configs/nginx:/etc/nginx/:ro
@@ -30,10 +33,10 @@ services:
     networks:
       - app-network
 
-  ## ✅ Database MariaDB
+  ## ✅ Database mysql
   db:
     container_name: ${DBNAME}
-    image: mariadb:latest
+    image: mysql:lts
     restart: unless-stopped
     volumes:
       - db-volume:/var/lib/mysql
@@ -41,10 +44,15 @@ services:
       - ./configs/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
     env_file: .env
     command: 
-          - "--default-time-zone=Europe/Rome"
-          - "--character-set-server=utf8mb4"
-          - "--collation-server=utf8mb4_unicode_ci"
-          - "--skip-grant-tables"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--mysql-native-password=ON"
+      - "--port=3306"  # MySQL internal port
+      - "--ssl-ca='' "  # Disable SSL
+      - "--ssl-cert='' "  # Disable SSL
+      - "--ssl-key='' "  # Disable SSL
+      - "--require_secure_transport=OFF" # Disable requirement for secure connections
+      # - "--skip-grant-tables"
     networks:
       - app-network
 
